@@ -11,51 +11,25 @@
 </head>
 <body>
 
+	<div>
+        Welcome <%= session.getAttribute("user") %>!
+        <a href='customerRep.jsp'>[Back to Customer Representative Dashboard]</a>
+    </div>
+  
 <%
 
-    /*
-    When there is a deletion of a reservation/flight ticket, save the seat number of the deleted res.
-    Use that seat to book the flight of the person coming off the waitlist.
-    */
-
-
-    /* Ticket Table in MySQL Attributes
-    `ticket_number` integer, 
-    `fname` varchar(50), 
-    `lname` varchar(50), 
-    `purchase_date_time` datetime, 
-    `passenger_id` integer, 
-    `booking_fee` float,
-    `total_fare` float,
-    `is_one_way` boolean,
-    */
-
-    /* SESSION ATTRIBUTES INSERTED INTO TICKET DISPLAY */
-    // session.setAttribute("totalBookingFee", totalBookingFee);
-    // session.setAttribute("totalFare", totalFare);
-    // session.setAttribute("fname", fname);
-    // session.setAttribute("lname", lname);
-    // session.setAttribute("passengerID", passengerID);
-    // session.setAttribute("dateTimeString", dateTimeString);
-
+  
 
     // ADD ONE WAY OR ROUND TRIP ATTRIBUTE TO TICKET TABLE --> while doing reservation
     // Retrieve session attributes
     String fname = (String) session.getAttribute("fname");
     String lname = (String) session.getAttribute("lname");
     String passengerID = (String) session.getAttribute("passengerID");
-    // String classType = (String) session.getAttribute("classType");
-    // String flightNum = (String) session.getAttribute("flightNum");
-    // Double bookingFee = (Double) session.getAttribute("bookingFee");
     String totalBookingFee = (String) session.getAttribute("totalBookingFee");
     String totalFare = (String) session.getAttribute("totalFare");
     String dateTimeString = (String) session.getAttribute("dateTimeString");
-    // String airlineID = (String) session.getAttribute("airlineID");
-    //TODO: get departing and returning info separately. 
-    String username = (String) session.getAttribute("user");
-
+    String username = (String) session.getAttribute("userCusRep");
     String oneOrRound = (String) session.getAttribute("oneOrRound"); 
-    // String class_type2 = (String) session.getAttribute("classType2");
     ArrayList<ArrayList<String>> flight_info_list = (ArrayList<ArrayList<String>>) session.getAttribute("flight_info_list");
     
 
@@ -82,33 +56,6 @@
             checkTicketRs.close();
             checkTicketStmt.close();
         } while (!isUnique);
-
-        // do {
-        //     nextTicketNumber = (int)(Math.random() * 1000000); // Generate a random ticket number
-
-        //     String checkTicketNumberSQL = "SELECT COUNT(*) FROM Ticket WHERE ticket_number = ?";
-        //     try (PreparedStatement checkTicketStmt = conn.prepareStatement(checkTicketNumberSQL)) {
-        //         checkTicketStmt.setInt(1, nextTicketNumber);
-        //         try (ResultSet checkTicketRs = checkTicketStmt.executeQuery()) {
-        //             if (checkTicketRs.next()) {
-        //                 int count = checkTicketRs.getInt(1);
-        //                 isUnique = count == 0;
-        //             } else {
-        //                 // This means ResultSet didn't move to the first row, which is unexpected in this case
-        //                 throw new Exception("Failed to move ResultSet cursor to the first row for ticket number validation");
-        //             }
-        //         } catch (SQLException e) {
-        //             // Handle SQL exception
-        //             throw new Exception("SQL Exception occurred during ticket number validation", e);
-        //         }
-        //     } catch (SQLException e) {
-        //         // Handle SQL exception
-        //         throw new Exception("SQL Exception occurred while preparing statement for ticket number validation", e);
-        //     }
-        // } while (!isUnique);
-
-        // Assuming flightNumber is passed from previous page
-        // String flightNumber = request.getParameter("flightNumber");
         ArrayList<String> flight_1 = flight_info_list.get(0);
         
 
@@ -260,10 +207,9 @@
             pstmtBooking.setInt(2, nextTicketNumber); // The generated ticket number
 
             pstmtBooking.executeUpdate();
-            out.println("<a href='success.jsp'>Back to Home</a>");
+            out.println("<a href='success.jsp'>Back to Search</a>");
             out.println("<h2>Your ticket has been successfully booked.</h2>");
             out.println("<p>Your ticket number is: " + nextTicketNumber + ".</p>");
-            
         } else {
            if("0".equals(oneOrRound)){
                 if(flight_1_capacity_check){

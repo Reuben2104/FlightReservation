@@ -14,6 +14,11 @@
 </head>
 <body>
 
+	<div>
+        Welcome <%= session.getAttribute("user") %>!
+        <a href='customerRep.jsp'>[Back to Customer Representative Dashboard]</a>
+    </div>
+
     <p style="font-size: 30px;">Selected flight(s):</p>
 
 	<%
@@ -27,11 +32,6 @@
         con = db.getConnection();
         
         ArrayList<ArrayList<String>> flight_info_list = (ArrayList<ArrayList<String>>) session.getAttribute("flight_info_list");
-
-        // String departingFlightNumber = (String) session.getAttribute("departingFlightNumber");
-        // String departingAirlineID = (String) session.getAttribute("departingAirlineID");
-        // String returningFlightNumber = (String) session.getAttribute("returningFlightNumber");
-        // String returningAirlineID = (String) session.getAttribute("returningAirlineID");
        
         String fname = request.getParameter("fname");
         String lname = request.getParameter("lname");
@@ -170,7 +170,7 @@
     <br>
     <br>
         
-	<form action="successfulReservation.jsp" method="POST">
+	<form action="successfulReservationCustomerRep.jsp" method="POST">
 		
         <input type="submit" value="Reserve Ticket">
         

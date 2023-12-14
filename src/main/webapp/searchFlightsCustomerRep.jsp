@@ -1,3 +1,4 @@
+<%@ page import="java.sql.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
@@ -7,16 +8,34 @@ if ((session.getAttribute("user") == null)) {
 %>
 You are not logged in<br/>
 <a href="login.jsp">Please Login</a>
-<%} else {
-%>
-Welcome <%=session.getAttribute("user")%>!
-<a href='logout.jsp'>[Log out]</a>
-<a href='faqs.jsp'>[FAQs]</a>
-<a href='pastReservations.jsp'>[View Past Reservations]</a>
-<a href='upcomingReservations.jsp'>[View Upcoming Reservations]</a>
-<a href="notification.jsp" class="btn btn-info">Check Notifications</a>
+<% else {
+	String userCusRep = request.getParameter("usernameCustomerRep"); 
+	session.setAttribute("userCusRep", userCusRep);
+	
+	Connection conn = null;
 
-<%-- 
+	 try {
+	    	
+		 Class.forName("com.mysql.jdbc.Driver");
+         conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/users", "root", "LogMe@2021");
+
+	        
+	        
+	   String str = "SELECT * FROM Customer WHERE username = ? AND account_type = 'customer';";
+	   try (PreparedStatement preparedStatement = conn.prepareStatement(str)) {
+	   
+		   preparedStatement.setString(1, userCusRep);
+       	   ResultSet resultSet = preparedStatement.executeQuery();
+       
+	   if(resultSet.next()){
+       
+	
+%>
+	<div>
+        Welcome <%= session.getAttribute("user") %>!
+        <a href='customerRep.jsp'>[Back to Customer Representative Dashboard]</a>
+    </div>
+        
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
@@ -31,8 +50,8 @@ Welcome <%=session.getAttribute("user")%>!
 
         toggleAdditionalSection();
     });
-</script> --%>
-<%-- 
+</script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
 
@@ -47,28 +66,12 @@ Welcome <%=session.getAttribute("user")%>!
 
         toggleAdditionalSection();
     });
-</script> --%>
-
-<%-- <script>
-    document.addEventListener("DOMContentLoaded", function () {
-
-    	function toggleAdditionalSection() {
-            var oneOrRound = document.getElementById("one_or_round");
-            var additionalSection = document.getElementById("additional_section3");
-
-            additionalSection.style.display = oneOrRound.value === "0" ? "block" : "none";
-        }
-
-        document.getElementById("one_or_round").addEventListener("change", toggleAdditionalSection);
-
-        toggleAdditionalSection();
-    });
-</script> --%>
+</script>
 
 
 <p style="font-size: 30px;">Search Flights</p>
 
-    <form action="flightResults.jsp" method="POST">
+    <form action="flightResultsCustomerRep.jsp" method="POST">
         
         <label for="flexible_or_not">Select Flexibility:</label>
         <select name="flexible_or_not" id="flexible_or_not">
@@ -142,10 +145,10 @@ Welcome <%=session.getAttribute("user")%>!
 		filter_price, filter_airline, filter_takeoff_time, filter_landing_time 
 		-->
 		
-		<%-- <div id="additional_section2"> --%>
+		<div id="additional_section2">
 		Departing Flight Filters:
 		<br>
-		<%-- </div> --%>
+		</div>
 		
 		<label for="filter_price">Filter by Price:</label>
 		<input type="number" name="filter_price" id="filter_price" placeholder="Enter maximum price">
@@ -168,7 +171,7 @@ Welcome <%=session.getAttribute("user")%>!
 		<br>
 		<br>
        
-		<%-- <div id="additional_section"> --%>
+		<div id="additional_section">
 		
 		Returning Flight Filters: <br>
 		    
@@ -193,7 +196,7 @@ Welcome <%=session.getAttribute("user")%>!
 			<br> 
 			<br>
 			
-		<%-- </div> --%>
+		</div>
 	
 	<input type="submit" value="Search Flights">
 	</form>
@@ -201,5 +204,20 @@ Welcome <%=session.getAttribute("user")%>!
 	
 		    	
 <%
+} else {
+                // If the username doesn't exist, prompt the user to re-enter
+%>
+                <div>
+                    Customer does not exist. Please re-enter your customer's username and password.
+                    <a href='customerRep.jsp'>[Back to Customer Representative Dashboard]</a>
+                </div>
+<%
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(); // Handle the exception appropriately
+    } finally {
+    	if (conn != null) conn.close();
+    }
 }
 %>

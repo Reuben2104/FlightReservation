@@ -10,6 +10,12 @@
 </head>
 <body>
 
+	<div>
+        Welcome <%= session.getAttribute("user") %>!
+        <a href='customerRep.jsp'>[Back to Customer Representative Dashboard]</a>
+    </div>
+    
+
     <p style="font-size: 30px;">Selected flight(s):</p>
 
     <%
@@ -33,16 +39,7 @@
     }
     
 
-    // String departingFlightNumber = request.getParameter("departingFlightNumber");
-    // String returningFlightNumber = request.getParameter("returningFlightNumber");
-    // if("0".equals((String) session.getAttribute("oneOrRound"))){
-    //     flight_info_list.add(returning_parts_list);
-    // }
     session.setAttribute("flight_info_list", flight_info_list);
-    // session.setAttribute("departingFlightNumber", departing_flightNumber);
-    // session.setAttribute("departingAirlineID", departing_airlineID);
-    // session.setAttribute("returningFlightNumber", returning_flightNumber);
-    // session.setAttribute("returningAirlineID", returning_airlineID);
 
     ApplicationDB db = null;
     Connection con = null;
@@ -76,52 +73,13 @@
             }
         }
         
-        // String departingFlightQuery = "SELECT * FROM Flight WHERE flight_number = ? AND airline_ID = ? ";
-        // PreparedStatement departingFlightStmt = con.prepareStatement(departingFlightQuery);
-        // departingFlightStmt.setString(1, departingFlightNumber);
-        // departingFlightStmt.setString(2, departingAirlineID);
-        // ResultSet departingFlightResult = departingFlightStmt.executeQuery();
-
-        // if (departingFlightResult.next()) {
-        //     String departingFlightDetails = "Departing Flight: " +
-        //         "Flight Number - " + departingFlightResult.getString("flight_number") +
-        //         ", Departure Date - " + departingFlightResult.getString("departure_date") +
-        //         ", Airline - " + departingFlightResult.getString("airline_ID") +
-        //         ", Departure Airport - " + departingFlightResult.getString("departure_airport") +
-        //         ", Arrival Airport - " + departingFlightResult.getString("destination_airport") +
-        //         ", Departure Time - " + departingFlightResult.getString("departure_time") +
-        //         ", Arrival Time - " + departingFlightResult.getString("arrival_time") +
-        //         ", Price - $" + departingFlightResult.getString("price");
-
-        //     out.println("<p>" + departingFlightDetails + "</p>");
-        // }
-
-        // String returningFlightQuery = "SELECT * FROM Flight WHERE flight_number = ? AND airline_ID = ? ";
-        // PreparedStatement returningFlightStmt = con.prepareStatement(returningFlightQuery);
-        // returningFlightStmt.setString(1, returningFlightNumber);
-        // returningFlightStmt.setString(2, returningAirlineID);
-        // ResultSet returningFlightResult = returningFlightStmt.executeQuery();
-
-        // if (returningFlightResult.next()) {
-        //     String returningFlightDetails = "Returning Flight: " +
-        //         "Flight Number - " + returningFlightResult.getString("flight_number") +
-        //         ", Departure Date - " + returningFlightResult.getString("departure_date") +
-        //         ", Airline - " + returningFlightResult.getString("airline_ID") +
-        //         ", Departure Airport - " + returningFlightResult.getString("departure_airport") +
-        //         ", Arrival Airport - " + returningFlightResult.getString("destination_airport") +
-        //         ", Departure Time - " + returningFlightResult.getString("departure_time") +
-        //         ", Arrival Time - " + returningFlightResult.getString("arrival_time") +
-        //         ", Price - $" + returningFlightResult.getString("price");
-
-        //     out.println("<p>" + returningFlightDetails + "</p>");
-        // }  
-        
+ 
    %>   
    
    <p style="font-size: 30px;">Fill out ticket information:</p>
     
         
-	<form action="ticketDisplay.jsp" method="POST">
+	<form action="ticketDisplayCustomerRep.jsp" method="POST">
 
         <label for="fname">First name:</label>
         <input type="text" name="fname" id="fname" required>
